@@ -1,7 +1,7 @@
-import pandas as pd
+import pandas as pd # type: ignore
 import numpy as np
 import re
-import psycopg2
+import psycopg2 # type: ignore
 from psycopg2 import OperationalError, errorcodes, errors  # type: ignore
 
 
@@ -30,10 +30,10 @@ def extraer_marca_cantidad(nombre):
                         "oro aragon", "oro virgen", "saeta", "suroliva", "valdezarza", "verde segura", "duc", "lr", "la colmenarena", "mntbelle", 
                         "santa gadea", "consorcio", "lorea", "santa teresa", "naturgreen", "mustela", "babaria", "babybio", "sveltesse", "saha", "arronizarbe"]
   
-    marca = next((m for m in marcas_conocidas if m in nombre.lower()), np.nan)
+    marca = next((m for m in marcas_conocidas if m in nombre.lower()), np.nan) #va iterando por la lista de marcas y si no coincide ninguna pone nan
     
     cantidad = re.search(r"(\d+(\.\d+)?\s*(x\s*\d+\s*)?[ml|l|cl|g|mg|kg]+)", nombre.lower())
-    cantidad = cantidad.group(0) if cantidad else np.nan #De vuelve la cadena macheada por la re
+    cantidad = cantidad.group(0) if cantidad else np.nan #Devuelve la cadena macheada por la re
     df = pd.Series([marca, cantidad])
     return df
 
