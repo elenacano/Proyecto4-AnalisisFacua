@@ -78,6 +78,15 @@ def creacion_tablas(conexion, cursor):
         cursor.execute(query_creacion_tipo_producto)
         conexion.commit()
 
+        # Creación tabla marca
+        query_creacion_marca = """create table if not exists marcas (
+                                id_marca numeric(8,4) primary key,
+                                nombre varchar(100) not null
+                                );"""
+
+        cursor.execute(query_creacion_marca)
+        conexion.commit()
+
         # Creación tabla comparativa
         query_creacion_comparativa = """create table if not exists comparativa (
                                 id_comparativa serial primary key,
@@ -85,12 +94,16 @@ def creacion_tablas(conexion, cursor):
                                 id_producto integer not null,
                                 nombre varchar(300) not null,
                                 tipo varchar(200),
+                                id_marca numeric(8,4),
                                 fecha date not null,
+                                dia_semana varchar(100) not null,
                                 precio numeric(8,4),
+                                cantidad varchar(100),
                                 incremento varchar(50),
                                 porcentaje numeric(8,4),
                                 foreign key (id_supermercado) references supermercados(id_supermercado),
-                                foreign key (id_producto) references tipo_producto(id_producto)
+                                foreign key (id_producto) references tipo_producto(id_producto),
+                                foreign key (id_marca) references marcas(id_marca)
                                 );"""
 
         cursor.execute(query_creacion_comparativa)
@@ -114,11 +127,21 @@ def insercion_productos(conexion, cursor):
     cursor.executemany(query_insercion, lista_tuplas_productos)
     conexion.commit()
 
+def insercion_marcas(conexion, cursor):
+    df_tabla_marcas = pd.read_csv("../datos/tabla_marcas.csv", index_col=0)
+    lista_tuplas_marcas = [tuple(fila) for fila in df_tabla_marcas.values]
+    query_insercion = "insert into marcas (id_marca, nombre) values (%s, %s)"
+    cursor.executemany(query_insercion, lista_tuplas_marcas)
+    conexion.commit()
+
 def insercion_comparativa(conexion, cursor):
     df_tabla_comparativa = pd.read_csv("../datos/tabla_comparativa.csv", index_col=0)
+    df_tabla_comparativa['id_marca'] = df_tabla_comparativa['id_marca'].replace(np.nan, None)
     lista_tuplas_comparativas = [tuple(fila) for fila in df_tabla_comparativa.values]
     query_insercion = """insert into comparativa 
-        (id_supermercado, id_producto, nombre, tipo, fecha, precio, incremento, porcentaje) 
-        values (%s, %s, %s, %s, %s, %s, %s, %s)"""
+        (id_supermercado, id_producto, nombre, tipo, fecha, precio, incremento, porcentaje, cantidad, dia_semana, id_marca) 
+        values (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
     cursor.executemany(query_insercion, lista_tuplas_comparativas)
     conexion.commit()
+
+
