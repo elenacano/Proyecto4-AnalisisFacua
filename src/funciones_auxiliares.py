@@ -1,8 +1,41 @@
 import pandas as pd
 import numpy as np
+import re
 import psycopg2
 from psycopg2 import OperationalError, errorcodes, errors  # type: ignore
 
+
+def extraer_marca_cantidad(nombre):
+    marcas_conocidas = ["hacendado", "auchan", "picual casa juncal", "capicua", "carrefour", "coosol", "fontasol", "koipe", "koipesol", "campomar", "ozolife",
+                     "la masia", "ybarra", "carbonell", "abaco", "la espanola", "aromas del sur", "natursoy", "dcoop", "arguinano", "oro bailen",
+                     "capricho andaluz", "coosur", "de nuestra tierra", "maestros de hojiblanca", "oro de genave", "marques de grinon", "nunez de prado", "oleoestepa",
+                      "retama", "maeva", "cantero de letur", "pascual", "puleva", "asturiana", "kaiku", "lauki", "president", "rio", "nestle", "el buen pastor",
+                       "danone", "laban", "actimel", "danacol", "noe", "denenes", "blemil", "almiron", "nivea", "ecran", "covap", "delial", "eroski",
+                        "borgesol", "borges", "lanisol", "olilan", "urzante", "senorio de segura", "palacio de los olivos", "jaencoop", "carapelli",
+                        "cazorliva", "duernas", "oro de genabe", "arrolan", "mendia", "olivar de segura", "saqura", "guillen", "mil olivas", "trujal tudela",
+                        "o de la ribera", "sierra de cazorla", "guzman", "elizondo", "ultzama", "beyena", "bomilk", "celta", "euskal herria", "lacturale", 
+                        "ram", "bizkaia", "ideal", "lactebal", "gaza", "flora", "diasol", "la almazara del olivar", "dia lactea", "abrisol", 
+                        "el corte ingles", "elosol", "primer dia de cosecha", "abril", "casa juncal", "aceites de ardales", "agus", "alhema de queiles",
+                        "aljibes", "almaoliva", "amarga y pica", "arboleda", "campo rico", "casas de hualdo", "castillo de canena",
+                        "changlot", "conde de benalua", "dominus", "dulcesol", "el lagar del soto", "ester sole", "ferrarini", "finca penamoucho",
+                        "flor de arana", "fuenroble", "germanor", "go vegg", "gotas de abril",  "hacienda el palo", "iznaoliva", "jacoliva", "lestornell",
+                        "la almazara de canjayar", "la boella", "la laguna de fuente de piedra", "la organic", "la redonda", "hojiblanca", "merula", 
+                        "misko", "miro", "molino de la calzada", "molino de olivas de bolea", "mueloliva", "nunez de prado", "oleaurum", "oleodiel",
+                        "olibeas", "oliva verde", "olivar del sur", "pago baldios san carlos", "pan de olivo", "parqueoliva", "picualia", 
+                        "reales almazaras de alcaniz", "romanico", "santiveri", "somontano", "surinver", "torremilano", "tresces", "unio", "alberto chicote",
+                        "valroble", "venta del baron", "altamira", "ato", "clesa", "ecomil", "el castillo", "feiraco", "granja noe", "hipp", "la colmenarena",
+                        "la yerbera", "lar", "larsa", "letona", "leyma", "lilibet", "llet nostra", "lletera campllong", "madriz", "pano", "priegola",
+                        "senorio de sarria", "tierra de sabor", "unicla", "valles unidos", "villacorona", "cexasol", "ondosol", "alcampo", "ucasol", 
+                        "el molino d gines", "fruto del sur", "giralda", "mar de olivos", "monegros", "olivar centenario", "olivo de cambil", "ondoliva",
+                        "oro aragon", "oro virgen", "saeta", "suroliva", "valdezarza", "verde segura", "duc", "lr", "la colmenarena", "mntbelle", 
+                        "santa gadea", "consorcio", "lorea", "santa teresa", "naturgreen", "mustela", "babaria", "babybio", "sveltesse", "saha", "arronizarbe"]
+  
+    marca = next((m for m in marcas_conocidas if m in nombre.lower()), np.nan)
+    
+    cantidad = re.search(r"(\d+(\.\d+)?\s*(x\s*\d+\s*)?[ml|l|cl|g|mg|kg]+)", nombre.lower())
+    cantidad = cantidad.group(0) if cantidad else np.nan #De vuelve la cadena macheada por la re
+    df = pd.Series([marca, cantidad])
+    return df
 
 def conexion_bbdd(nombre):
     try:  
