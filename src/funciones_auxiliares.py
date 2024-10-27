@@ -4,7 +4,28 @@ import re
 import psycopg2 # type: ignore
 from psycopg2 import OperationalError, errorcodes, errors  # type: ignore
 
-
+def obtener_subcategoria(row):
+    if row['producto'] == 'aceite de oliva':
+        if 'virgen extra' in row['nombre_producto']:
+            return 'virgen extra'
+        elif 'virgen' in row['nombre_producto']:
+            return 'virgen'
+        else:
+            return np.nan
+    elif row['producto'] == 'leche':
+        if 'entera' in row['nombre_producto']:
+            return 'entera'
+        elif 'semi' in row['nombre_producto'] or 'semidesnatada' in row['nombre_producto']:
+            return 'semidesnatada'
+        elif 'desnatada' in row['nombre_producto']:
+            return 'desnatada'
+        else:
+            return np.nan
+    elif row['nombre_producto'] == 'aceite de girasol':
+        return np.nan
+    else:
+        return np.nan
+    
 def extraer_marca_cantidad(nombre):
     marcas_conocidas = ["hacendado", "auchan", "picual casa juncal", "capicua", "carrefour", "coosol", "fontasol", "koipe", "koipesol", "campomar", "ozolife",
                      "la masia", "ybarra", "carbonell", "abaco", "la espanola", "aromas del sur", "natursoy", "dcoop", "arguinano", "oro bailen",
