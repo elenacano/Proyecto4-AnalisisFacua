@@ -5,6 +5,16 @@ import psycopg2 # type: ignore
 from psycopg2 import OperationalError, errorcodes, errors  # type: ignore
 
 def obtener_subcategoria(row):
+
+    """Extraemos de cada fila una subcategoría en función del nombre del producto
+
+    Args:
+        row: fila del dataframe
+
+    Returns:
+        Devuelve una string en caso de satisfacer algunas de las condiciones, de lo contario un Nan
+    """
+
     if row['producto'] == 'aceite de oliva':
         if 'virgen extra' in row['nombre_producto']:
             return 'virgen extra'
@@ -27,6 +37,16 @@ def obtener_subcategoria(row):
         return np.nan
     
 def extraer_marca_cantidad(nombre):
+    
+    """A partir del nombre de un producto extraemos su marca y cantidad.
+
+    Args:
+        nombre (str): nombre del producto.
+
+    Returns:
+        series: una serie con los valores almacenados. 
+    """
+
     marcas_conocidas = ["hacendado", "auchan", "picual casa juncal", "capicua", "carrefour", "coosol", "fontasol", "koipe", "koipesol", "campomar", "ozolife",
                      "la masia", "ybarra", "carbonell", "abaco", "la espanola", "aromas del sur", "natursoy", "dcoop", "arguinano", "oro bailen",
                      "capricho andaluz", "coosur", "de nuestra tierra", "maestros de hojiblanca", "oro de genave", "marques de grinon", "nunez de prado", "oleoestepa",
@@ -59,6 +79,16 @@ def extraer_marca_cantidad(nombre):
     return df
 
 def conexion_bbdd(nombre):
+    
+    """Establece una conexión a una base de datos
+
+    Args:
+        nombre (str): nombre de la base de datos
+
+    Returns:
+        conexion (psycopg2.extensions.connection): Objeto de conexión a la base de datos PostgreSQL.
+    """
+
     try:  
         conexion = psycopg2.connect(
         database = nombre,
@@ -80,6 +110,25 @@ def conexion_bbdd(nombre):
 
 
 def creacion_tablas(conexion, cursor):
+    
+    """Crea las tablas necesarias en la base de datos si no existen.
+
+    Las tablas creadas son:
+    - `supermercados`: Contiene la información de supermercados, con `id_supermercado` como clave primaria.
+    - `tipo_producto`: Contiene información sobre los tipos de productos, con `id_producto` como clave primaria.
+    - `marcas`: Contiene las marcas de productos, con `id_marca` como clave primaria.
+    - `comparativa`: Almacena información comparativa de productos, con referencias a las tablas `supermercados`, 
+      `tipo_producto` y `marcas`. Incluye detalles como el precio, fecha y porcentaje de incremento.
+
+    Args:
+        conexion (psycopg2.extensions.connection): Objeto de conexión a la base de datos.
+        cursor (psycopg2.extensions.cursor): Objeto de cursor para ejecutar comandos SQL.
+
+    Raises:
+        Exception: Si ocurre un error en la creación de las tablas, imprime el mensaje de error.
+    
+    """
+
     try:
         # Creación tabla supermercados
         query_creacion_supermercado = """create table if not exists supermercados (
@@ -135,6 +184,16 @@ def creacion_tablas(conexion, cursor):
 
 
 def insercion_supermercados(conexion, cursor):
+    
+    """Inserta registros de supermercados en la tabla `supermercados` de la base de datos.
+
+    Lee datos desde un archivo CSV llamado `tabla_super.csv` y los inserta en la tabla `supermercados`.
+
+    Args:
+        conexion (psycopg2.extensions.connection): Objeto de conexión a la base de datos.
+        cursor (psycopg2.extensions.cursor): Objeto de cursor para ejecutar comandos SQL.
+    """
+
     df_tabla_super = pd.read_csv("../datos/tabla_super.csv", index_col=0)
     lista_tuplas_super = [tuple(fila) for fila in df_tabla_super.values]
     query_insercion = "insert into supermercados (id_supermercado, nombre) values (%s, %s)"
@@ -142,6 +201,17 @@ def insercion_supermercados(conexion, cursor):
     conexion.commit()
 
 def insercion_productos(conexion, cursor):
+
+    """"Inserta registros de productos en la tabla `tipo_producto` de la base de datos.
+
+    Lee datos desde un archivo CSV llamado `tabla_productos.csv` y los inserta en la tabla `tipo_producto`.
+
+    Args:
+        conexion (psycopg2.extensions.connection): Objeto de conexión a la base de datos.
+        cursor (psycopg2.extensions.cursor): Objeto de cursor para ejecutar comandos SQL.
+
+    """
+
     df_tabla_productos = pd.read_csv("../datos/tabla_productos.csv", index_col=0)
     lista_tuplas_productos = [tuple(fila) for fila in df_tabla_productos.values]
     query_insercion = "insert into tipo_producto (id_producto, nombre) values (%s, %s)"
@@ -149,6 +219,16 @@ def insercion_productos(conexion, cursor):
     conexion.commit()
 
 def insercion_marcas(conexion, cursor):
+
+    """Inserta registros de marcas en la tabla `marcas` de la base de datos.
+
+    Lee datos desde un archivo CSV llamado `tabla_marcas.csv` y los inserta en la tabla `marcas`.
+
+    Args:
+        conexion (psycopg2.extensions.connection): Objeto de conexión a la base de datos.
+        cursor (psycopg2.extensions.cursor): Objeto de cursor para ejecutar comandos SQL.
+    """
+
     df_tabla_marcas = pd.read_csv("../datos/tabla_marcas.csv", index_col=0)
     lista_tuplas_marcas = [tuple(fila) for fila in df_tabla_marcas.values]
     query_insercion = "insert into marcas (id_marca, nombre) values (%s, %s)"
@@ -156,6 +236,18 @@ def insercion_marcas(conexion, cursor):
     conexion.commit()
 
 def insercion_comparativa(conexion, cursor):
+
+    """
+    Inserta registros de comparativas de productos en la tabla `comparativa` de la base de datos.
+
+    Lee datos desde un archivo CSV llamado `tabla_comparativa.csv` y los inserta en la tabla `comparativa`.
+    Reemplaza valores nulos en la columna `id_marca` con `None` para la correcta inserción en la base de datos.
+
+    Args:
+        conexion (psycopg2.extensions.connection): Objeto de conexión a la base de datos.
+        cursor (psycopg2.extensions.cursor): Objeto de cursor para ejecutar comandos SQL.
+
+    """
     df_tabla_comparativa = pd.read_csv("../datos/tabla_comparativa.csv", index_col=0)
     df_tabla_comparativa['id_marca'] = df_tabla_comparativa['id_marca'].replace(np.nan, None)
     lista_tuplas_comparativas = [tuple(fila) for fila in df_tabla_comparativa.values]
