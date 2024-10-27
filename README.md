@@ -59,6 +59,7 @@ Lo primero que se hizo es obtener por supermercado y tipo de producto un precio 
 En cuanto a las marcas se planteo que podría ser interesante ver cuales son las que más incrementos han sufrido, diferenciandolas por tipo de producto. dichas gráficas y conclusiones se pueden consultar en el notebook `4-consultas_bbdd`.
 
 Otra de las cuestiones relevantes a la hora de hacer el estudio era observar si había una tendencia en los días que había caidas o aumento en los precios de los productos, obteniendo la siguiente gráfica:
+
 ![Descripción de la imagen](imagenes/img2.png)
 
 Como podemos observar el día en el cual se ha experimentado mayor subida de precios es el miércoles, seguido de cerca por el jueves y martes. En cuanto los días con más bajadas de precios son los jueves, seguido de martes y miércoles. Por lo tanto, en los mismo días son en los que más subidas y bajadas se registran. Si quisiera asegurarme de que no va a haber muchas subidas pero quizás alguna bajada iría al super un sábado.
