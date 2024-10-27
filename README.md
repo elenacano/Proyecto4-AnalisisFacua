@@ -2,7 +2,7 @@
 
 ![Descripción de la imagen](imagenes/img1.jpeg)
 
-Este proyecto está diseñado para recopilar, almacenar, analizar y visualizar datos de precios de productos en diferentes supermercados de España a partir de la web de FACUA. Una vez obtenidos los datos y almacenados en una base de datos se procederá al análisis de los mimsos. Se busca comparar precios, observar que productos presentan mayor aunmentos o caida de precios, que días suelen presentarse estas caidas y aumentos, cuales son los productos más baratos en cada sypermercado.
+Este proyecto está diseñado para recopilar, almacenar, analizar y visualizar datos de precios de productos en diferentes supermercados de España a partir de la web de FACUA. Una vez obtenidos los datos y almacenados en una base de datos se procederá al análisis de los mimsos. Se busca comparar precios, observar que productos presentan mayores aumentos o caida de precios, que días suelen presentarse estas caidas y aumentos, cuales son los productos más baratos en cada supermercado y otras consultas más de interés.
 
 
 ## Estructura del Proyecto
@@ -26,7 +26,7 @@ Este proyecto consta de cuatro etapas, cada una en un cuaderno de Jupyter que do
 
     - Diseño de la base de datos en PostgreSQL para almacenar de manera eficiente la información recolectada.
 
-    - Creación de tablas SQL que permiten estructurar la información en categorías clave: supermercados, productos, marcas y comparativas de precios.
+    - Creación de tablas SQL que permiten estructurar la información en categorías clave: supermercados, tipo_productos, marcas y comparativas.
 
     - Análisis exploratorio y consultas SQL para extraer subconjuntos de datos de interés.
 
@@ -88,7 +88,7 @@ Además, también podemos tener en cuenta el precio de media de las actividades 
 Por lo tanto, en cuanto a vuelos la opción más económica es Roma, aunque dependerá también de las horas de los vuelos. En cuanto al hotel depende mucho de la ubicación y puntuación elegida, si se desea más cerca del centro y con mayor puntuación será más caro pero es verdad que tanto para Roma como para París se puede alcanzar un buen equilibrio con un precio de hotel relativamente bajo/medio, buena ubicación y una buena puntuación. Sin embargo, esta decisión queda totalmente en manos del cliente y sus necesidades. Finalmente, en cuanto a actividades, ambas ciudades tienen una amplia gama de opciones y siempre se pueden coger opciones más o menos económicas. Por lo que la principal sección verdaderamente influyente a nivel económico serían los vuelos, ya que tanto los hoteles como las actividades dependiendo de los gustos y necesidades del cliente sus precios van variando.
 
 
-## Estructura del Proyecto
+## Organización del Proyecto
 
 El proyecto está organizado de la siguiente manera:
 
