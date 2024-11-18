@@ -2,7 +2,7 @@
 
 ![Descripción de la imagen](imagenes/img1.jpeg)
 
-Este proyecto está diseñado para recopilar, almacenar, analizar y visualizar datos de precios de productos en diferentes supermercados de España a partir de la web de FACUA. Una vez obtenidos los datos y almacenados en una base de datos se procederá al análisis de los mimsos. Se busca comparar precios, observar que productos presentan mayores aumentos o caida de precios, que días suelen presentarse estas caidas y aumentos, cuales son los productos más baratos en cada supermercado y otras consultas más de interés.
+Este proyecto está diseñado para recopilar, almacenar, analizar y visualizar datos de precios de productos en diferentes supermercados de España a partir de la web de FACUA. Una vez obtenidos los datos y almacenados en una base de datos se procederá al análisis de los mismos. Se busca comparar precios, observar que productos presentan mayores aumentos o caidas de precios, qué días suelen presentarse estas caídas y aumentos, cuáles son los productos más baratos en cada supermercado y otras consultas más de interés.
 
 
 ## Estructura del Proyecto
